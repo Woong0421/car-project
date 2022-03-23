@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const FileStore = require('session-file-store')(session); // 세션을 파일에 저장
 const cookieParser = require('cookie-parser');
 
+
+
 let remote = "stop";
 let msg = 0;
 let msh = 0;
@@ -21,19 +23,17 @@ const client = mysql.createConnection({
 
 // node_modules의 express 패키지를 가져온다.
 const express = require('express');
+// const { Script } = require('vm');
 
 
 //app이라는 변수에 express 함수의 변환 값을 저장한다.
 const app = express();
 const http = require('http').Server(app);
 
-
-
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
-
 
 app.use(session({
     secret: 'root', // 데이터를 암호화 하기 위해 필요한 옵션
@@ -80,21 +80,26 @@ app.post('/login', (req, res) => {
             // 세션에 추가
             req.session.is_logined = true;
             req.session.username = data.username;
+            req.session.userid = data.userid;
+            req.session.userpassword = data.userpassword;
 
             req.session.save(function () { // 세션 스토어에 적용하는 작업
                 res.render('camera', { // 정보전달
                     username: data[0].username,
                     userid: data[0].userid,
+                    userpassword: data[0].userpassword,
                     is_logined: true
                 });
             });
-            res.end();
+            
         } else {
             console.log('로그인 실패');
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.write('<script>alert("로그인 불가. 아이디와 비밀번호를 다시 한번 확인해주세요!")</script>');
             res.write('<script>window.location="../"</script>');
             res.end();
+
+            res.render('login');
         }
     });
 
