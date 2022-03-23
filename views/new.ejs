@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <title>회원가입</title>
+        <style type="text/css">
+            *{margin: 0; padding: 0;}
+            h1{
+                font-size: 50px;
+                color: gray;
+            }
+            input{
+                height: 50px;
+                width: 100px;
+            }
+            #fuckyou1{
+                color: green;
+            }
+            #fuckyou2{
+                color: red;
+            }
+        </style>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>회원가입</h1>
+        <form method="post">
+        <fieldset>
+            <ul>
+                <li>
+                    <label>이름</label>
+                    <input type="text" id="user_name" name="username" size="10" autofocus>
+                </li>
+                <li>
+                    <label>아이디</label>
+                    <input type="text" id="user_id" name="userid" size="10" autofocus>
+                </li>
+                <li>
+                    <label>비밀번호</label>
+                    <input type="password" id="user_password" name="userpassword" size="10" autofocus>     
+                </li>
+                <li>
+                    <label>비밀번호 확인</label>
+                    <input type="password" id="user_password2" name="userpassword2" size="10" autofocus>
+                    <p id="check1">*비밀번호가 일치합니다</p>     
+                    <p id="check2">*비밀번호가 일치하지않습니다.</p>
+                </li>
+                <li>
+                    <label>전화번호</label>
+                    <input type="text" id="user_phone" name="userphone" size="10" autofocus>
+                </li>
+            </ul>
+        </fieldset>
+        <input type="submit" id="ok_btn" value="완료">
+        <script type="text/javascript">
+            $("#check1").hide();
+            $("#check2").hide();
+            $("#user_password2").keyup(function(){
+                var pwd1 = $("#user_password").val();
+                var pwd2 = $("#user_password2").val();
+                if(pwd1 != "" || pwd2 != ""){
+                    if(pwd1 == pwd2) {
+                        $("#check1").show();
+                        $("#check2").hide();
+                        $("#ok_btn").removeAttr("disabled");
+                    }else{
+                        $("#check1").hide();
+                        $("#check2").show();
+                        $("#ok_btn").attr("disabled", "disabled");
+                    }
+                }
+            });
+        </script>
+        </form>
+        <input type="button" value="취소" onclick="history.back();">
+    </body>
+</html>

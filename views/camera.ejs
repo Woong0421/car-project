@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>camera view</title>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+</head>
+<body>
+    <h1>camera</h1>
+    <img id="camstreaming" src="http://192.168.0.207:8091/?action=stream" alt="http://192.168.0.207:8091/?action=stream"></img>
+    <input type="button" value="로그아웃" onclick="history.back();">
+
+    <h1 id="temphum" name="temphum">0</h1>
+    <h1 id="handle" name="handle">stop</h1>
+    <button type="button" id="go_btn" name="go_btn" onclick="go();">go</button>
+    <button type="button" id="right_btn" name="right_btn" onclick="right();">right</button>
+    <button type="button" id="back_btn" name="back_btn" onclick="back();">back</button>
+    <button type="button" id="left_btn" name="left_btn" onclick="left();">left</button><br>
+
+    <button type="button" id="save" onclick="">사진 캡처</button>
+    <button type="button" id="temp" onclick="">온도측정</button>
+
+    <script type="text/javascript">
+        var goEle = document.querySelector('#go_btn');
+        var rightEle = document.querySelector('#right_btn');
+        var backEle = document.querySelector('#back_btn');
+        var leftEle = document.querySelector('#left_btn');
+        var isPressed = false;
+
+        goEle.addEventListener('mouseup', function(event){
+            isPressed = false;
+            document.getElementById("handle").innerHTML = "stop";
+            window.location.href = "/stop";
+        })
+        goEle.addEventListener('mousedown', function(event){
+            isPressed = true;
+            document.getElementById("handle").innerHTML = "go";
+            window.location.href = "/go";
+        })
+
+        rightEle.addEventListener('mouseup', function(event){
+            isPressed = false;
+            document.getElementById("handle").innerHTML = "stop";
+            window.location.href = "/stop";
+        })
+        rightEle.addEventListener('mousedown', function(event){
+            isPressed = true;
+            document.getElementById("handle").innerHTML = "right";
+            window.location.href = "/right";
+        })
+
+        backEle.addEventListener('mouseup', function(event){
+            isPressed = false;
+            document.getElementById("handle").innerHTML = "stop";
+            window.location.href = "/stop";
+        })
+        backEle.addEventListener('mousedown', function(event){
+            isPressed = true;
+            document.getElementById("handle").innerHTML = "back";
+            window.location.href = "/back";
+        })
+
+        leftEle.addEventListener('mouseup', function(event){
+            isPressed = false;
+            document.getElementById("handle").innerHTML = "stop";
+            window.location.href = "/stop";
+        })
+        leftEle.addEventListener('mousedown', function(event){
+            isPressed = true;
+            document.getElementById("handle").innerHTML = "left";
+            window.location.href = "/left";
+        })
+    </script>
+
+
+    <script>
+        // 비동기 post 방식으로 '/'호출 하여 데이터 받아서 제이쿼리로 반영하기.
+        //시간별로 여러번 호출하는 함수는 setInterval();
+        $(document).ready(function() {
+            setInterval("getTempHum()", 1000); // 3000ms(3초)가 경과하면 ozit_timer_test() 함수를 실행합니다.
+        });
+
+        function getTempHum(){
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    console.log(xmlHttp.responseText);
+                    document.getElementById("temphum").innerHTML = xmlHttp.responseText;
+            }
+            xmlHttp.open("GET", "/temphum", true); // true for asynchronous 
+            xmlHttp.send(null);
+        }
+
+
+        
+    </script>
+
+     <script>
+        $(function(){
+            $("#save").click(function(){
+                html2canvas($('#camstreaming').get(0)).then(function(canvas) {
+                    document.getElementById('img').body.appendChild(canvas)
+                });
+            });
+        });
+    </script>
+</body>
+</html>
