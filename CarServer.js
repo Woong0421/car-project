@@ -13,9 +13,6 @@ let remote = "stop";
 let msg = 0;
 let msh = 0;
 
-// var {remote2} = require('./routes/retrofit');
-// remote = remote2;
-
 const client = mysql.createConnection({
 
     user: 'root',
@@ -26,16 +23,11 @@ const client = mysql.createConnection({
 
 // node_modules의 express 패키지를 가져온다.
 const express = require('express');
-// const { Script } = require('vm');
 
 
 //app이라는 변수에 express 함수의 변환 값을 저장한다.
 const app = express();
 const http = require('http').Server(app);
-//환경변수에서 port를 가져온다. 환경변수가 없을시 5050포트를 지정한다.
-// const server = app.listen(3000, () => {
-//     console.log('Start Server');
-// });
 
 
 
@@ -91,14 +83,11 @@ app.post('/login', (req, res) => {
             // 세션에 추가
             req.session.is_logined = true;
             req.session.username = data.username;
-            req.session.userid = data.userid;
-            req.session.userpassword = data.userpassword;
 
             req.session.save(function () { // 세션 스토어에 적용하는 작업
                 res.render('camera', { // 정보전달
                     username: data[0].username,
                     userid: data[0].userid,
-                    userpassword: data[0].userpassword,
                     is_logined: true
                 });
             });
@@ -109,8 +98,6 @@ app.post('/login', (req, res) => {
             res.write('<script>alert("로그인 불가. 아이디와 비밀번호를 다시 한번 확인해주세요!")</script>');
             res.write('<script>window.location="../"</script>');
             res.end();
-
-            res.render('login');
         }
     });
 
@@ -149,12 +136,9 @@ app.post('/new', (req, res) => {
             res.write('<script>alert("회원가입이 완료되었습니다!")</script>');
             res.write('<script>window.location="../"</script>');
             res.end();
-            // res.redirect('/');
         }
         else {
             console.log('회원가입 실패');
-            // res.send('<script>alert("회원가입 실패");</script>')
-            // res.redirect('/login');
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.write('<script>alert("회원가입에 실패하였습니다. 다시 한번 확인해주세요!")</script>');
             res.write('<script>window.location="../"</script>');
@@ -162,27 +146,6 @@ app.post('/new', (req, res) => {
         }
     });
 });
-
-
-
-
-// app.get('/get', function (req, res, next) {
-//     console.log('GET 호출 / data : ' + req.query.data);
-//     console.log('path : ' + req.path);
-//     res.send('get success')
-// });
-
-// app.get('/camera', (req, res) => {
-//     res.render('camera');
-// })
-
-// app.post('/camera', (req, res) => {
-//     res.render('camera');
-//     msg=req.body.msg;
-//     msh=req.body.msh;
-//     console.log(msg+ " " + msh);
-//     // console.log();
-// })
 
 app.get('/temphum', (req, res) => {
     console.log("temphum : " + msg+ " " + msh);
