@@ -7,8 +7,6 @@ const crypto = require('crypto');
 const FileStore = require('session-file-store')(session); // 세션을 파일에 저장
 const cookieParser = require('cookie-parser');
 
-var retrofitRouter = require('./routes/retrofit');
-
 let remote = "stop";
 let msg = 0;
 let msh = 0;
@@ -36,7 +34,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/retrofit', retrofitRouter);
 
 app.use(session({
     secret: 'root', // 데이터를 암호화 하기 위해 필요한 옵션
